@@ -14,6 +14,16 @@ var $builtinmodule = function(name)
     mod.processing = null
     mod.p = null
 
+    // ProcessingJS constants
+    mod.TOP = Sk.builtin.assk$(101, Sk.builtin.nmber.int$);
+    mod.BOTTOM = Sk.builtin.assk$(102, Sk.builtin.nmber.int$);
+    mod.BASELINE = Sk.builtin.assk$(0, Sk.builtin.nmber.int$);
+    mod.RIGHT = Sk.builtin.assk$(39, Sk.builtin.nmber.int$);
+    mod.LEFT = Sk.builtin.assk$(37, Sk.builtin.nmber.int$);
+    mod.SHAPE = Sk.builtin.assk$(5, Sk.builtin.nmber.int$);
+    mod.MODEL = Sk.builtin.assk$(4, Sk.builtin.nmber.int$);
+    mod.SCREEN = Sk.builtin.assk$(256, Sk.builtin.nmber.int$);
+    mod.IMAGE = Sk.builtin.assk$(2, Sk.builtin.nmber.int$);
     mod.CENTER = Sk.builtin.assk$(3, Sk.builtin.nmber.int$);
     mod.RADIUS = Sk.builtin.assk$(2, Sk.builtin.nmber.int$);
     mod.CORNERS = Sk.builtin.assk$(1, Sk.builtin.nmber.int$);
@@ -21,20 +31,181 @@ var $builtinmodule = function(name)
     mod.RGB = Sk.builtin.assk$(1, Sk.builtin.nmber.int$);
     mod.HSB = Sk.builtin.assk$(3, Sk.builtin.nmber.int$);
     mod.CMYK = Sk.builtin.assk$(5, Sk.builtin.nmber.int$);
-    mod.MITER = new Sk.builtin.str('miter');
-    mod.BEVEL = new Sk.builtin.str('bevel');
-    mod.ROUND = new Sk.builtin.str('round');
-    mod.SQUARE = new Sk.builtin.str('butt');
-    mod.PROJECT = new Sk.builtin.str('square');
+    mod.MITER = new Sk.builtin.str('miter'); //MITER 8
+    mod.BEVEL = new Sk.builtin.str('bevel'); //BEVEL 32
+    mod.ROUND = new Sk.builtin.str('round'); //ROUND 2
+    mod.SQUARE = new Sk.builtin.str('butt'); //SQUARE 1
+    mod.PROJECT = new Sk.builtin.str('square'); //PROJECT 4
+    mod.PI = new Sk.builtin.assk$(Math.PI, Sk.builtin.nmber.float$);
+    mod.HALF_PI = new Sk.builtin.assk$(Math.PI*0.5, Sk.builtin.nmber.float$);
+    mod.QUARTER_PI = new Sk.builtin.assk$(Math.PI*0.25, Sk.builtin.nmber.float$);
+    mod.TWO_PI = new Sk.builtin.assk$(Math.PI*2, Sk.builtin.nmber.float$);
+
+// internal utility function (process arguments to functions: sometimes they come through as objects with a v property, sometimes as numbers)
+    processArgs = function(a) {
+	return Array.prototype.slice.call(a).map(function(d){return typeof(d)=="object" ? d.v : d;});
+    }
+	
+// Calculation
+
+//    mod.abs --> already in python
+
+    mod.ceil = new Sk.builtin.func(function(v) {
+        return new Sk.builtin.nmber(
+			mod.processing.ceil(v.v), 
+			Sk.builtin.nmber.float$);
+    });
+
+    mod.constrain = new Sk.builtin.func(function(value, min, max) {
+        return new Sk.builtin.nmber(
+			mod.processing.constrain(value.v, min.v, max.v), 
+			Sk.builtin.nmber.float$);
+    });
+
+    mod.dist = new Sk.builtin.func(function(x1, y1, x2, y2) {
+	return new Sk.builtin.nmber(
+			mod.processing.dist(x1.v, y1.v, x2.v, y2.v), 
+			Sk.builtin.nmber.float$);
+    });
+
+    mod.exp = new Sk.builtin.func(function(v) {
+        return new Sk.builtin.nmber(
+			mod.processing.exp(v.v), 
+			Sk.builtin.nmber.float$);
+    });
+ 	
+    mod.floor = new Sk.builtin.func(function(v) {
+        return new Sk.builtin.nmber(
+			mod.processing.floor(v.v), 
+			Sk.builtin.nmber.float$);
+    });
+
+    mod.lerp = new Sk.builtin.func(function(v1, v2, t) {
+        return new Sk.builtin.nmber(
+			mod.processing.lerp(v1.v, v2.v, t.v), 
+			Sk.builtin.nmber.float$);
+    });
+
+    mod.log = new Sk.builtin.func(function(v) {
+        return new Sk.builtin.nmber(
+			mod.processing.log(v.v), 
+			Sk.builtin.nmber.float$);
+    });
+
+    mod.mag = new Sk.builtin.func(function(a, b) {
+	return new Sk.builtin.nmber(
+			mod.processing.mag(a.v, b.v), 
+			Sk.builtin.nmber.float$);
+    });
+
+    mod.map = new Sk.builtin.func(function(v, fromLo, fromHi, toLo, toHi) {
+	return new Sk.builtin.nmber(	
+			mod.processing.map(v.v, fromLo.v, fromHi.v, toLo.v, toHi.v), 
+			Sk.builtin.nmber.float$);
+    });
+
+    mod.norm = new Sk.builtin.func(function(v, fromLo, fromHi) {
+	return new Sk.builtin.nmber(
+			mod.processing.norm(v.v, fromLo.v, fromHi.v), 
+			Sk.builtin.nmber.float$);
+    });
+
+    mod.pow = new Sk.builtin.func(function(num, exp) {
+        return new Sk.builtin.nmber(
+			mod.processing.pow(num.v,exp.v), 
+			Sk.builtin.nmber.float$);
+    });
+
+    mod.round = new Sk.builtin.func(function(v) {
+        return new Sk.builtin.nmber(
+			mod.processing.round(v.v), 
+			Sk.builtin.nmber.float$);
+    });
+
+    mod.sq = new Sk.builtin.func(function(v) {
+        return new Sk.builtin.nmber(
+			mod.processing.sq(v.v), 
+			Sk.builtin.nmber.float$);
+    });
+
+    mod.sqrt = new Sk.builtin.func(function(v) {
+        return new Sk.builtin.nmber(
+			mod.processing.sqrt(v.v), 
+			Sk.builtin.nmber.float$);
+    });
+
+// trigonometry 
+//  (no need to wrap these -- just import everything from the math module)
+
+// random
+    mod.noise = new Sk.builtin.func(function(v1, v2) {
+	var nz = 0.0;
+	if( typeof(v2) == "undefined" ) {
+		nz = mod.processing.noise(v1.v.toFixed(5));
+	}
+	else {
+		nz = mod.processing.noise(v1.v.toFixed(5), v2.v.toFixed(5)); 
+	}
+	return new Sk.builtin.nmber( nz, Sk.builtin.nmber.float$ );
+    });
+
+    mod.noiseDetail = new Sk.builtin.func(function(octaves,falloff) {
+	if( typeof(falloff) == "undefined" ) {
+		mod.processing.noiseDetail(octaves.v);
+	}
+	else {
+		mod.processing.noiseDetail(octaves.v,falloff.v);
+	}
+    });
+
+    mod.noiseSeed = new Sk.builtin.func(function(v) {
+	mod.processing.noiseSeed(v.v.toFixed(5));
+    });
+
+    mod.random = new Sk.builtin.func(function(low,high) {
+	var r = 0.0;
+	if( typeof(high) == "undefined" ) {
+		r = mod.processing.random(low.v);
+	}
+	else {
+		r = mod.processing.random(low.v, high.v);
+	}
+	return new Sk.builtin.nmber( r, Sk.builtin.nmber.float$ );
+    });
+
+    mod.randomSeed = new Sk.builtin.func(function(v) {
+	mod.processing.randomSeed(v.v.toFixed(5));
+    });
+
+// Typography
+    mod.text = new Sk.builtin.func(function(s, x, y) {
+	mod.processing.text(s.v, x.v, y.v);
+    });
+
+    mod.loadFont = new Sk.builtin.func(function(font) {
+	return mod.processing.loadFont(font.v);
+    });
+
+    mod.textFont = new Sk.builtin.func(function(font, size) {
+	mod.processing.textFont(font.v, size.v);
+    });
+
+    mod.textAlign = new Sk.builtin.func(function(horiz, vert) {
+	if(typeof(vert) == "undefined") { mod.processing.textAlign(horiz.v); }
+	else { mod.processing.textAlign(horiz.v, vert.v); }
+    });
+
+    mod.textSize = new Sk.builtin.func(function(size) {
+	mod.processing.textSize(size.v);
+    });
 
 // 2D - Primitives
     mod.line = new Sk.builtin.func(function(x1, y1, x2, y2) {
-        mod.processing.line(x1.v, y1.v, x2.v, y2.v);
+	mod.processing.line(x1.v, y1.v, x2.v, y2.v);
     });
     
     mod.ellipse = new Sk.builtin.func(function(x,y,r1,r2) {
-        mod.processing.ellipse(x.v,y.v,r1.v,r2.v)
-        
+	mod.processing.ellipse(x.v,y.v,r1.v,r2.v);
     });
 
     mod.point = new Sk.builtin.func(function(x1,y1) {
@@ -55,7 +226,16 @@ var $builtinmodule = function(name)
         } else {
             var rad = radius.v
         }
-        mod.processing.rect(x.v, y.v, width.v, height.v, rad)
+	var rx = x.v,
+	    ry = y.v,
+	    rw = width.v,
+	    rh = height.v;
+	if (rh < 0)	// handle negative widths and heights gracefully
+	{ ry += rh; rh *= -1; }
+	if (rw < 0)
+	{ rx += rw; rw *= -1; }
+	
+        mod.processing.rect(rx, ry, rw, rh, rad)
     });
     
     mod.triangle = new Sk.builtin.func(function(x1, y1, x2, y2, x3, y3) {
@@ -79,31 +259,38 @@ var $builtinmodule = function(name)
         
     });
 
-    mod.fill = new Sk.builtin.func(function(r,g,b) {
+    mod.fill = new Sk.builtin.func(function(r,g,b,a) {
         // r will be either:
         //      a number in which case the fill will be grayscale
         //      a color object
         // g, and b may be undefined.  If they hold values it will
         // be assumed that we have an r,g,b color tuple
-        if (typeof(g) !== 'undefined')
-            g = g.v
-        if (typeof(b) !== 'undefined')
-            b = b.v
-    
-        mod.processing.fill(r.v,g,b)
-        
+	if (arguments.length == 2)
+	{ mod.processing.fill(r.v,g.v); }	// g is assumed to be alpha in this case
+	else {
+		if (typeof(g) !== 'undefined')
+		    g = g.v
+		if (typeof(b) !== 'undefined')
+		    b = b.v
+		if (typeof(a) !== 'undefined')
+		    a = a.v
+		mod.processing.fill(r.v,g,b,a)
+        }
     });
 
 
-    mod.stroke = new Sk.builtin.func(function(r,g,b) {
-
-        if (typeof(g) !== 'undefined')
-            g = g.v
-        if (typeof(b) !== 'undefined')
-            b = b.v
-
-        mod.processing.stroke(r.v,g,b)
-        
+    mod.stroke = new Sk.builtin.func(function(r,g,b,a) {
+	if (arguments.length == 2)
+	{ mod.processing.stroke(r.v,g.v); }	// g is assumed to be alpha in this case
+	else {
+		if (typeof(g) !== 'undefined')
+		    g = g.v
+		if (typeof(b) !== 'undefined')
+		    b = b.v
+		if (typeof(a) !== 'undefined')
+		    a = a.v
+		mod.processing.stroke(r.v,g,b,a)
+        }
     });
 
     mod.noStroke = new Sk.builtin.func(function() {
@@ -156,6 +343,16 @@ var $builtinmodule = function(name)
         mod.processing.exit()
     });
 
+    mod.pmouseX = new Sk.builtin.func(function() {
+        return Sk.builtin.assk$(mod.processing.pmouseX, Sk.builtin.nmber.int$);
+        
+    });
+
+    mod.pmouseY = new Sk.builtin.func(function() {
+        return Sk.builtin.
+ssk$(mod.processing.pmouseY, Sk.builtin.nmber.int$);
+        
+    });
 
     mod.mouseX = new Sk.builtin.func(function() {
         return Sk.builtin.assk$(mod.processing.mouseX, Sk.builtin.nmber.int$);
@@ -233,6 +430,21 @@ var $builtinmodule = function(name)
 
     // todo:  applyMatrix, popMatrix, printMatrix??, pushMatrix, resetMatrix, rotate{X,Y,Z}
     
+    mod.pushMatrix = new Sk.builtin.func(function() {
+	mod.processing.pushMatrix();
+    });
+
+    mod.popMatrix = new Sk.builtin.func(function() {
+	mod.processing.popMatrix();
+    });
+
+   /* mod.loadStrings = new Sk.builtin.func(function(filename) {
+	console.log(filename.v);
+	console.log(mod.processing.loadStrings(filename.v));
+	console.log(new Sk.builtin.tuple(mod.processing.loadStrings(filename.v)));
+
+	return new Sk.builtin.list(mod.processing.loadStrings(filename.v));
+    });*/
 
     //  //////////////////////////////////////////////////////////////////////
     //  Run
@@ -245,10 +457,11 @@ var $builtinmodule = function(name)
         function sketchProc(processing) {
             mod.processing = processing
 
-            // processing.setup = function() {
-            //     if Sk.globals['setup']
-            //         Sk.misceval.callsim(Sk.globals['setup'])
-            // }
+             //processing.setup = function() {
+                //if (Sk.globals['setup'] ) {
+                //     Sk.misceval.callsim(Sk.globals['setup'])
+		//}
+             //}
 
             
             processing.draw = function() {
@@ -274,8 +487,8 @@ var $builtinmodule = function(name)
                         processing.noLoop()
                 }
 
-                mod.frameCount = processing.frameCount  
-                if (Sk.globals['draw'])
+                mod.frameCount = processing.frameCount;
+		if (Sk.globals['draw'])
                     Sk.misceval.callsim(Sk.globals['draw'])
             }
             
@@ -285,7 +498,7 @@ var $builtinmodule = function(name)
 
              for(var cb in callBacks) {
                 if (Sk.globals[callBacks[cb]]) {
-                    console.log('defining ' + callBacks[cb])                    
+                    //console.log('defining ' + callBacks[cb])                    
                     processing[callBacks[cb]] = new Function("Sk.misceval.callsim(Sk.globals['"+callBacks[cb]+"']);")
                 }
             }
@@ -310,7 +523,7 @@ var $builtinmodule = function(name)
             else if (key == 'py')
                 return mod.processing.pmouseY;
             else if (key == 'pressed')
-                return mod.processing.mousePressed;
+                return mod.processing.__mousePressed;
             else if (key == 'button')
                 return mod.processing.mouseButton
         });
@@ -327,13 +540,13 @@ var $builtinmodule = function(name)
 
         $loc.__getattr__ = new Sk.builtin.func(function(self,key) {
             if (key == 'key') {
-                console.log(mod.processing.key)
+                console.log(mod.processing.key.toString())   //?
                 return new Sk.builtin.str(mod.processing.key.toString())
             }
             else if (key == 'keyCode') 
                 return mod.processing.keyCode
             else if (key == 'keyPressed')
-                return new Sk.builtin.str(mod.processing.keyPressed) // todo bool
+                return new Sk.builtin.str(mod.processing.__keyPressed) // todo bool
         });
 
 
@@ -350,8 +563,8 @@ var $builtinmodule = function(name)
         $loc.__getattr__ = new Sk.builtin.func(function(self,key) {
             if (key == 'frameCount') 
                 return mod.processing.frameCount
-            else if (key == 'frameRate') 
-                return mod.processing.frameRate
+            else if (key == 'frameRate') {
+                return mod.processing.__frameRate;}
             else if (key == 'height')
                 return mod.processing.height
             else if (key == 'width')
@@ -400,7 +613,6 @@ var $builtinmodule = function(name)
     
 
     var colorClass = function($gbl, $loc) {
-        /* images are loaded async.. so its best to preload them */
         $loc.__init__ = new Sk.builtin.func(function(self, val1, val2, val3, alpha) {
             if (typeof(val2) !== 'undefined')
                 val2 = val2.v
@@ -408,7 +620,7 @@ var $builtinmodule = function(name)
                 val3 = val3.v
             if (typeof(alpha) !== 'undefined')
                 alpha = alpha.v
-            self.v = mod.processing.color(val1.v, val2, val3, alpha)
+	    self.v = mod.processing.color(val1.v, val2, val3, alpha)
         })
     
     }
@@ -427,6 +639,61 @@ var $builtinmodule = function(name)
         return Sk.builtin.assk$(mod.processing.blue(clr.v), Sk.builtin.nmber.int$);
     });
 
+    mod.alpha = new Sk.builtin.func(function(clr) {
+        return Sk.builtin.assk$(mod.processing.alpha(clr.v), Sk.builtin.nmber.int$);
+    });
+
+    // PVector class and functions
+    //
+ /*   var pvectorClass = function($gbl, $loc) {
+	 $loc.__init__ = new Sk.builtin.func(function(self,x,y,z) {
+          //  self.v = pv
+            self.x = Sk.builtin.assk$(x, Sk.builtin.nmber.float$);
+            self.y = Sk.builtin.assk$(y, Sk.builtin.nmber.float$);
+	    self.z = Sk.builtin.assk$(z, Sk.builtin.nmber.float$);
+        })
+
+        $loc.__getattr__ = new Sk.builtin.func(function(self,key) {
+            if (key == 'x') return new Sk.builtin.nmber(self.x, Sk.builtin.nmber.float$);
+            if (key == 'y') return new Sk.builtin.nmber(self.y, Sk.builtin.nmber.float$);
+	    if (key == 'z') return new Sk.builtin.nmber(self.z, Sk.builtin.nmber.float$);
+        });
+	
+	$loc.__setattr__ = new Sk.builtin.func(function(self,key,value) {
+            if (key == 'x') self.x = value.v;
+            if (key == 'y') self.y = value.v;
+	    if (key == 'z') self.z = value.v;
+        });
+	
+	$gbl.bork = new Sk.builtin.func(function(self) {
+	    console.log("yuck"); //return new Sk.builtin.nmber( 42.0, Sk.builtin.nmber.float$);
+	});
+
+/*	$loc.__str__ = new Sk.builtin.func(function(self) {
+	    return ("[ "+self.x+", "+self.y+", "+self.z+" ]");
+	});
+	
+	$loc.get = new Sk.builtin.func(function(self) {
+	    return Sk.misceval.callsim($loc.__init__, self, self.x, self.y, self.z);
+	});
+
+	$loc.mag = new Sk.builtin.func(function(self) {
+	    console.log(Math.sqrt(Math.pow(self.x,2) + Math.pow(self.y,2) + Math.pow(self.z,2)));
+	    return new Sk.builtin.nmber(
+			Math.sqrt(Math.pow(self.x,2) + Math.pow(self.y,2) + Math.pow(self.z,2)),
+			Sk.builtin.nmber.float$);
+	});
+    }
+
+    mod.PVector = Sk.misceval.buildClass(mod,pvectorClass,'PVector',[]);
+*/
+/*    mod.PVector.prototype.mag = function() {
+	return new Sk.builtin.nmber(
+			Math.sqrt(Math.pow(self.x,2) + Math.pow(self.y,2) + Math.pow(self.z,2)),
+			Sk.builtin.nmber.float$);
+    };
+  */  
+
     // Image class and functions
     //
     var imageClass = function($gbl, $loc) {
@@ -444,7 +711,7 @@ var $builtinmodule = function(name)
     
     }
 
-    mod.PImage = Sk.misceval.buildClass(mod,imageClass,'PImage', [])
+    mod.PImage = Sk.misceval.buildClass(mod,imageClass,'PImage', []);
 
     mod.loadImage = new Sk.builtin.func(function(imfile) {
         var i = mod.processing.loadImage(imfile.v);
@@ -452,10 +719,17 @@ var $builtinmodule = function(name)
         return Sk.misceval.callsim(mod.PImage,i);
     });
     
+    mod.imageMode = new Sk.builtin.func(function(mode) {
+	mod.processing.imageMode(mode.v);
+    });
 
     mod.image = new Sk.builtin.func(function(im,x,y) {
         if (im.v.width > 0)
             mod.processing.image(im.v,x.v,y.v,im.v.width,im.v.height)
+    });
+
+    mod.save = new Sk.builtin.func(function(filename) {
+	mod.processing.save(filename.v);
     });
 
     mod.get = new Sk.builtin.func(function(x,y) {
