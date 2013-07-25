@@ -28,6 +28,14 @@ var $builtinmodule = function(name)
     mod.RADIUS = Sk.builtin.assk$(2, Sk.builtin.nmber.int$);
     mod.CORNERS = Sk.builtin.assk$(1, Sk.builtin.nmber.int$);
     mod.CORNER = Sk.builtin.assk$(0, Sk.builtin.nmber.int$);
+    mod.POINTS = Sk.builtin.assk$(3, Sk.builtin.nmber.int$);
+    mod.LINES = Sk.builtin.assk$(5, Sk.builtin.nmber.int$);
+    mod.TRIANGLES = Sk.builtin.assk$(9, Sk.builtin.nmber.int$);
+    mod.TRIANGLE_FAN = Sk.builtin.assk$(11, Sk.builtin.nmber.int$);
+    mod.TRIANGLE_STRIP = Sk.builtin.assk$(10, Sk.builtin.nmber.int$);
+    mod.QUADS = Sk.builtin.assk$(17, Sk.builtin.nmber.int$);
+    mod.QUAD_STRIP = Sk.builtin.assk$(18, Sk.builtin.nmber.int$);
+    mod.CLOSE = Sk.builtin.assk$(2, Sk.builtin.nmber.int$);
     mod.RGB = Sk.builtin.assk$(1, Sk.builtin.nmber.int$);
     mod.HSB = Sk.builtin.assk$(3, Sk.builtin.nmber.int$);
     mod.CMYK = Sk.builtin.assk$(5, Sk.builtin.nmber.int$);
@@ -119,7 +127,7 @@ var $builtinmodule = function(name)
     mod.round = new Sk.builtin.func(function(v) {
         return new Sk.builtin.nmber(
 			mod.processing.round(v.v), 
-			Sk.builtin.nmber.float$);
+			Sk.builtin.nmber.int$);
     });
 
     mod.sq = new Sk.builtin.func(function(v) {
@@ -177,7 +185,66 @@ var $builtinmodule = function(name)
 	mod.processing.randomSeed(v.v.toFixed(5));
     });
 
-// Typography
+    // String functions
+    mod.nf = new Sk.builtin.func(function(args) {
+	if(arguments.length == 2) {
+	    var intValue = arguments[0].v,
+		digits = arguments[1].v;
+	    return new Sk.builtin.str(mod.processing.nf(intValue,digits));
+	}
+	else if(arguments.length == 3) {
+	    var floatValue = arguments[0].v,
+		left = arguments[1].v,
+		right = arguments[2].v;
+	    return new Sk.builtin.str(mod.processing.nf(floatValue,left,right));
+	}
+	else { console.log("ERROR: wrong number of parameters to function nf()"); }
+    });
+
+    mod.nfc = new Sk.builtin.func(function(args) {
+	if(arguments.length == 1) {
+	    var intValue = arguments[0].v;
+	    return new Sk.builtin.str(mod.processing.nfc(intValue));
+	}
+	else if(arguments.length == 2) {
+	    var floatValue = arguments[0].v,
+		right = arguments[1].v;
+	    return new Sk.builtin.str(mod.processing.nf(floatValue,right));
+	}
+	else { console.log("ERROR: wrong number of parameters to function nfc()"); }
+    });
+
+    mod.nfp = new Sk.builtin.func(function(args) {
+	if(arguments.length == 2) {
+	    var intValue = arguments[0].v,
+		digits = arguments[1].v;
+	    return new Sk.builtin.str(mod.processing.nfp(intValue,digits));
+	}
+	else if(arguments.length == 3) {
+	    var floatValue = arguments[0].v,
+		left = arguments[1].v,
+		right = arguments[2].v;
+	    return new Sk.builtin.str(mod.processing.nfp(floatValue,left,right));
+	}
+	else { console.log("ERROR: wrong number of parameters to function nfp()"); }
+    });
+
+    mod.nfs = new Sk.builtin.func(function(args) {
+	if(arguments.length == 2) {
+	    var intValue = arguments[0].v,
+		digits = arguments[1].v;
+	    return new Sk.builtin.str(mod.processing.nfs(intValue,digits));
+	}
+	else if(arguments.length == 3) {
+	    var floatValue = arguments[0].v,
+		left = arguments[1].v,
+		right = arguments[2].v;
+	    return new Sk.builtin.str(mod.processing.nfs(floatValue,left,right));
+	}
+	else { console.log("ERROR: wrong number of parameters to function nfs()"); }
+    });
+
+    // Typography
     mod.text = new Sk.builtin.func(function(s, x, y) {
 	mod.processing.text(s.v, x.v, y.v);
     });
@@ -199,7 +266,7 @@ var $builtinmodule = function(name)
 	mod.processing.textSize(size.v);
     });
 
-// 2D - Primitives
+    // 2D - Primitives
     mod.line = new Sk.builtin.func(function(x1, y1, x2, y2) {
 	mod.processing.line(x1.v, y1.v, x2.v, y2.v);
     });
@@ -242,6 +309,180 @@ var $builtinmodule = function(name)
             mod.processing.triangle(x1.v, y1.v, x2.v, y2.v, x3.v, y3.v)
         });
             
+
+    // Curves
+    mod.bezier = new Sk.builtin.func(function(args) {
+	if(arguments.length == 8) {
+	    var x1 = arguments[0].v, 
+		y1 = arguments[1].v, 
+		cx1 = arguments[2].v, 
+		cy1 = arguments[3].v, 
+		cx2 = arguments[4].v, 
+		cy2 = arguments[5].v, 
+		x2 = arguments[6].v, 
+		y2 = arguments[7].v; 
+		mod.processing.bezier(x1, y1, cx1, cy1, cx2, cy2, x2, y2);
+	}
+	else if(arguments.length == 12) {
+	    var x1 = arguments[0].v, 
+		y1 = arguments[1].v, 
+		z1 = arguments[2].v, 
+		cx1 = arguments[3].v, 
+		cy1 = arguments[4].v, 
+		cz1 = arguments[5].v, 
+		cx2 = arguments[6].v, 
+		cy2 = arguments[7].v, 
+		cz2 = arguments[8].v, 
+		x2 = arguments[9].v, 
+		y2 = arguments[10].v, 
+		z2 = arguments[11].v;
+		mod.processing.bezier(x1, y1, z1, cx1, cy1, cz1, cx2, cy2, cz2, x2, y2, z2);
+	}
+	else { console.log("ERROR: wrong number of parameters to function bezier()"); }
+    });
+	
+    mod.bezierDetail = new Sk.builtin.func(function(d) {
+        mod.processing.bezierDetail(d.v);
+    });
+
+    mod.bezierPoint = new Sk.builtin.func(function(a,b,c,d,t) {
+        return new Sk.builtin.nmber( 
+		mod.processing.bezierPoint(a.v,b.v,c.v,d.v,t.v), 
+		Sk.builtin.nmber.float$ );
+    });
+
+    mod.bezierTangent = new Sk.builtin.func(function(a,b,c,d,t) {
+        return new Sk.builtin.nmber( 
+		mod.processing.bezierTangent(a.v,b.v,c.v,d.v,t.v), 
+		Sk.builtin.nmber.float$ );
+    });
+
+    mod.curve = new Sk.builtin.func(function(args) {
+	if(arguments.length == 8) {
+	    var x1 = arguments[0].v, 
+		y1 = arguments[1].v, 
+		x2 = arguments[2].v, 
+		y2 = arguments[3].v, 
+		x3 = arguments[4].v, 
+		y3 = arguments[5].v, 
+		x4 = arguments[6].v, 
+		y4 = arguments[7].v; 
+		mod.processing.bezier(x1, y1, x2, y2, x3, y3, x4, y4);
+	}
+	else if(arguments.length == 12) {
+	    var x1 = arguments[0].v, 
+		y1 = arguments[1].v, 
+		z1 = arguments[2].v, 
+		x2 = arguments[3].v, 
+		y2 = arguments[4].v, 
+		z2 = arguments[5].v, 
+		x3 = arguments[6].v, 
+		y3 = arguments[7].v, 
+		z3 = arguments[8].v, 
+		x4 = arguments[9].v, 
+		y4 = arguments[10].v, 
+		z4 = arguments[11].v;
+		mod.processing.curve(x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4);
+	}
+	else { console.log("ERROR: wrong number of parameters to function curve()"); }
+    });
+
+    mod.curveDetail = new Sk.builtin.func(function(d) {
+        mod.processing.curveDetail(d.v);
+    });	
+
+    mod.curvePoint = new Sk.builtin.func(function(a,b,c,d,t) {
+        return new Sk.builtin.nmber( 
+		mod.processing.curvePoint(a.v,b.v,c.v,d.v,t.v), 
+		Sk.builtin.nmber.float$ );
+    });
+
+    mod.curveTangent = new Sk.builtin.func(function(a,b,c,d,t) {
+        return new Sk.builtin.nmber( 
+		mod.processing.curveTangent(a.v,b.v,c.v,d.v,t.v), 
+		Sk.builtin.nmber.float$ );
+    });
+
+    mod.curveTightness = new Sk.builtin.func(function(t) {
+        mod.processing.curveTightness(t.v)
+    });
+
+    // Vertex
+    mod.beginShape = new Sk.builtin.func(function(mode) {
+	if( typeof(mode) == 'undefined' )
+	{ mod.processing.beginShape() }
+	else
+	{ mod.processing.beginShape(mode.v) }
+    });	
+
+    mod.bezierVertex = new Sk.builtin.func(function(args) {
+	if(arguments.length == 6) {
+	    var cx1 = arguments[2].v, 
+		cy1 = arguments[3].v, 
+		cx2 = arguments[4].v, 
+		cy2 = arguments[5].v, 
+		x2 = arguments[6].v, 
+		y2 = arguments[7].v; 
+		mod.processing.bezierVertex(cx1, cy1, cx2, cy2, x2, y2);
+	}
+	else if(arguments.length == 9) {
+	    var cx1 = arguments[3].v, 
+		cy1 = arguments[4].v, 
+		cz1 = arguments[5].v, 
+		cx2 = arguments[6].v, 
+		cy2 = arguments[7].v, 
+		cz2 = arguments[8].v, 
+		x2 = arguments[9].v, 
+		y2 = arguments[10].v, 
+		z2 = arguments[11].v;
+		mod.processing.bezierVertex(cx1, cy1, cz1, cx2, cy2, cz2, x2, y2, z2);
+	}
+	else { console.log("ERROR: wrong number of parameters to function bezierVertex()"); }
+    });
+
+    mod.curveVertex = new Sk.builtin.func(function(x,y,z) {
+	if(typeof(z) == 'undefined') 
+	{ mod.processing.curveVertex(x.v,y.v); }
+	else
+	{ mod.processing.curveVertex(x.v,y.v,z.v); }
+    });
+
+    mod.vertex = new Sk.builtin.func(function(args) {
+	if(arguments.length == 2){
+	    var x = arguments[0].v,
+		y = arguments[1].v;
+	    mod.processing.vertex(x,y);
+	}
+	else if(arguments.length == 3){
+	    var x = arguments[0].v,
+		y = arguments[1].v,
+		z = arguments[2].v;
+	    mod.processing.vertex(x,y,z);
+	}
+	else if(arguments.length == 4){
+	    var x = arguments[0].v,
+		y = arguments[1].v,
+		u = arguments[2].v,
+		v = arguments[3].v;
+	    mod.processing.vertex(x,y,u,v);
+	}
+	else if(arguments.length == 5){
+	    var x = arguments[0].v,
+		y = arguments[1].v,
+		z = arguments[2].v,
+		u = arguments[3].v,
+		v = arguments[4].v;
+	    mod.processing.vertex(x,y,z,u,v);
+	}
+	else { console.log("ERROR: wrong number of parameters to function vertex()"); }
+    });
+	
+    mod.endShape = new Sk.builtin.func(function(mode) {
+	if( typeof(mode) == 'undefined' )
+	{ console.log("endShape()"); mod.processing.endShape() }
+	else
+	{ console.log("endShape("+mode.v+")"); mod.processing.endShape(mode.v) }
+    });	
 
     // 3D Primitives
 
@@ -349,8 +590,7 @@ var $builtinmodule = function(name)
     });
 
     mod.pmouseY = new Sk.builtin.func(function() {
-        return Sk.builtin.
-ssk$(mod.processing.pmouseY, Sk.builtin.nmber.int$);
+        return Sk.builtin.assk$(mod.processing.pmouseY, Sk.builtin.nmber.int$);
         
     });
 
@@ -540,7 +780,6 @@ ssk$(mod.processing.pmouseY, Sk.builtin.nmber.int$);
 
         $loc.__getattr__ = new Sk.builtin.func(function(self,key) {
             if (key == 'key') {
-                console.log(mod.processing.key.toString())   //?
                 return new Sk.builtin.str(mod.processing.key.toString())
             }
             else if (key == 'keyCode') 
@@ -610,7 +849,8 @@ ssk$(mod.processing.pmouseY, Sk.builtin.nmber.int$);
         mod.processing.loadPixels()
         console.log(mod.processing.pixels)
     });
-    
+
+    //mod.pixels = new Sk.builtin.list(mod.processing.pixels); 
 
     var colorClass = function($gbl, $loc) {
         $loc.__init__ = new Sk.builtin.func(function(self, val1, val2, val3, alpha) {
@@ -713,6 +953,12 @@ ssk$(mod.processing.pmouseY, Sk.builtin.nmber.int$);
 
     mod.PImage = Sk.misceval.buildClass(mod,imageClass,'PImage', []);
 
+    mod.createImage = new Sk.builtin.func(function(w,h,mode) {
+        var i = mod.processing.createImage(w.v,h.v,mode.v);
+        imList.push(i);
+        return Sk.misceval.callsim(mod.PImage,i);
+    });
+
     mod.loadImage = new Sk.builtin.func(function(imfile) {
         var i = mod.processing.loadImage(imfile.v);
         imList.push(i);
@@ -730,6 +976,10 @@ ssk$(mod.processing.pmouseY, Sk.builtin.nmber.int$);
 
     mod.save = new Sk.builtin.func(function(filename) {
 	mod.processing.save(filename.v);
+    });
+
+    mod.saveFrame = new Sk.builtin.func(function(filename) {
+	mod.processing.saveFrame(filename.v);
     });
 
     mod.get = new Sk.builtin.func(function(x,y) {
