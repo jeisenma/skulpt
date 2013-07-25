@@ -780,7 +780,7 @@ var $builtinmodule = function(name)
 
         $loc.__getattr__ = new Sk.builtin.func(function(self,key) {
             if (key == 'key') {
-                return new Sk.builtin.str(mod.processing.key.toString())
+                return new Sk.builtin.str(mod.processing.key)
             }
             else if (key == 'keyCode') 
                 return mod.processing.keyCode
