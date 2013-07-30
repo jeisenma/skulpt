@@ -15,6 +15,37 @@ var $builtinmodule = function(name)
     mod.p = null
 
     // ProcessingJS constants
+    mod.BACKSPACE = Sk.builtin.assk$(8, Sk.builtin.nmber.int$);
+    mod.TAB = Sk.builtin.assk$(9, Sk.builtin.nmber.int$);
+    mod.ENTER = Sk.builtin.assk$(10, Sk.builtin.nmber.int$);
+    mod.RETURN = Sk.builtin.assk$(13, Sk.builtin.nmber.int$);
+    mod.ESC = Sk.builtin.assk$(27, Sk.builtin.nmber.int$);
+    mod.DELETE = Sk.builtin.assk$(127, Sk.builtin.nmber.int$);
+    mod.CODED = Sk.builtin.assk$(65535, Sk.builtin.nmber.int$);
+    mod.SHIFT = Sk.builtin.assk$(16, Sk.builtin.nmber.int$);
+    mod.CONTROL = Sk.builtin.assk$(17, Sk.builtin.nmber.int$);
+    mod.ALT = Sk.builtin.assk$(18, Sk.builtin.nmber.int$);
+    mod.CAPSLK = Sk.builtin.assk$(20, Sk.builtin.nmber.int$);
+    mod.PGUP = Sk.builtin.assk$(33, Sk.builtin.nmber.int$);
+    mod.PGDN = Sk.builtin.assk$(34, Sk.builtin.nmber.int$);
+    mod.END = Sk.builtin.assk$(35, Sk.builtin.nmber.int$);
+    mod.HOME = Sk.builtin.assk$(36, Sk.builtin.nmber.int$);
+    mod.LEFT = Sk.builtin.assk$(37, Sk.builtin.nmber.int$);
+    mod.UP = Sk.builtin.assk$(38, Sk.builtin.nmber.int$);
+    mod.RIGHT = Sk.builtin.assk$(39, Sk.builtin.nmber.int$);
+    mod.DOWN = Sk.builtin.assk$(40, Sk.builtin.nmber.int$);
+    mod.F1 = Sk.builtin.assk$(112, Sk.builtin.nmber.int$);
+    mod.F2 = Sk.builtin.assk$(113, Sk.builtin.nmber.int$);
+    mod.F3 = Sk.builtin.assk$(114, Sk.builtin.nmber.int$);
+    mod.F4 = Sk.builtin.assk$(115, Sk.builtin.nmber.int$);
+    mod.F5 = Sk.builtin.assk$(116, Sk.builtin.nmber.int$);
+    mod.F6 = Sk.builtin.assk$(117, Sk.builtin.nmber.int$);
+    mod.F7 = Sk.builtin.assk$(118, Sk.builtin.nmber.int$);
+    mod.F8 = Sk.builtin.assk$(119, Sk.builtin.nmber.int$);
+    mod.F9 = Sk.builtin.assk$(120, Sk.builtin.nmber.int$);
+    mod.F10 = Sk.builtin.assk$(121, Sk.builtin.nmber.int$);
+    mod.F11 = Sk.builtin.assk$(122, Sk.builtin.nmber.int$);
+    mod.F12 = Sk.builtin.assk$(123, Sk.builtin.nmber.int$);
     mod.TOP = Sk.builtin.assk$(101, Sk.builtin.nmber.int$);
     mod.BOTTOM = Sk.builtin.assk$(102, Sk.builtin.nmber.int$);
     mod.BASELINE = Sk.builtin.assk$(0, Sk.builtin.nmber.int$);
@@ -479,9 +510,15 @@ var $builtinmodule = function(name)
 	
     mod.endShape = new Sk.builtin.func(function(mode) {
 	if( typeof(mode) == 'undefined' )
-	{ console.log("endShape()"); mod.processing.endShape() }
+	{ 
+		//console.log("endShape()"); 
+		mod.processing.endShape();
+	 }
 	else
-	{ console.log("endShape("+mode.v+")"); mod.processing.endShape(mode.v) }
+	{ 
+		//console.log("endShape("+mode.v+")"); 
+		mod.processing.endShape(2);
+	 }
     });	
 
     // 3D Primitives
@@ -969,9 +1006,11 @@ var $builtinmodule = function(name)
 	mod.processing.imageMode(mode.v);
     });
 
-    mod.image = new Sk.builtin.func(function(im,x,y) {
-        if (im.v.width > 0)
-            mod.processing.image(im.v,x.v,y.v,im.v.width,im.v.height)
+    mod.image = new Sk.builtin.func(function(im,x,y,w,h) {
+	if( typeof(w) != 'undefined' && typeof(h) != 'undefined')
+	{ mod.processing.image(im.v,x.v,y.v,w.v,h.v); }
+        else if (im.v.width > 0)
+        { mod.processing.image(im.v,x.v,y.v,im.v.width,im.v.height); }
     });
 
     mod.save = new Sk.builtin.func(function(filename) {
