@@ -276,8 +276,11 @@ var $builtinmodule = function(name)
     });
 
     // Typography
-    mod.text = new Sk.builtin.func(function(s, x, y) {
-	mod.processing.text(s.v, x.v, y.v);
+    mod.text = new Sk.builtin.func(function(s, x, y, w, h, z) {
+	if(arguments.length == 3) { mod.processing.text(s.v, x.v, y.v); }
+	if(arguments.length == 4) { mod.processing.text(s.v, x.v, y.v, w.v); }
+	if(arguments.length == 5) { mod.processing.text(s.v, x.v, y.v, w.v, h.v); }
+	if(arguments.length == 6) { mod.processing.text(s.v, x.v, y.v, w.v, h.v, z.v); }
     });
 
     mod.loadFont = new Sk.builtin.func(function(font) {
